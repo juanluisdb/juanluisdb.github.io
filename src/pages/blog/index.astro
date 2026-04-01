@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDate } from '../../utils/formatDate';
+
+const posts = (await getCollection('blog')).sort(
+  (left, right) => right.data.pubDate.valueOf() - left.data.pubDate.valueOf(),
+);
+const canonicalURL = Astro.site ? new URL('/blog/', Astro.site).toString() : undefined;
+---
+
+<Base
+  title="Posts · Juan Luis Domínguez"
+  description="Posts from Juan Luis Domínguez on AI, automation, and building useful systems."
+  canonicalURL={canonicalURL}
+>
+  <section class="space-y-12">
+    <header class="space-y-4">
+      <a href="/" class="inline-block text-sm text-accent underline-offset-4 hover:underline">
+        ← Home
+      </a>
+      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Posts</h1>
+    </header>
+
+    <ul class="space-y-8">
+      {posts.map((post) => (
+        <li>
+          <a
+            href={`/blog/${post.id}/`}
+            class="inline-flex flex-wrap items-baseline gap-x-3 gap-y-1 text-base underline-offset-4 hover:underline"
+          >
+            <span class="font-mono text-sm text-fg-muted">{formatDate(post.data.pubDate)}</span>
+            <span>{post.data.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>

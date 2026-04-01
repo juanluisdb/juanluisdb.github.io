@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalURL?: string;
+  socialImage?: string;
+}
+
+const {
+  title,
+  description,
+  canonicalURL = Astro.site
+    ? new URL(Astro.url.pathname, Astro.site).toString()
+    : Astro.url.toString(),
+  socialImage,
+} = Astro.props;
+
+const socialImageURL =
+  socialImage && Astro.site ? new URL(socialImage, Astro.site).toString() : socialImage;
+---
+
+<!doctype html>
+<html lang="en" class="bg-canvas text-fg antialiased">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {socialImageURL && <meta property="og:image" content={socialImageURL} />}
+    <meta
+      name="twitter:card"
+      content={socialImageURL ? 'summary_large_image' : 'summary'}
+    />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {socialImageURL && <meta name="twitter:image" content={socialImageURL} />}
+    <link rel="canonical" href={canonicalURL} />
+  </head>
+  <body class="min-h-screen bg-canvas text-fg">
+    <main class="mx-auto max-w-2xl px-6 py-20 sm:px-8">
+      <slot />
+    </main>
+  </body>
+</html>

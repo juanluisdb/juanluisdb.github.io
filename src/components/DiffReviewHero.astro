@@ -1,0 +1,272 @@
+---
+interface Props {
+  size?: 'article' | 'cover';
+  label?: string;
+  class?: string;
+}
+
+const {
+  size = 'article',
+  label = 'A code review diff where business context changes the implementation.',
+  class: className,
+} = Astro.props;
+---
+
+<figure
+  class:list={['diff-review-hero', className]}
+  data-size={size}
+  role="img"
+  aria-label={label}
+>
+  <div class="diff-review-hero__terminal">
+    <div class="diff-review-hero__bar">
+      <div class="diff-review-hero__dots" aria-hidden="true">
+        <span class="diff-review-hero__dot diff-review-hero__dot--red"></span>
+        <span class="diff-review-hero__dot diff-review-hero__dot--yellow"></span>
+        <span class="diff-review-hero__dot diff-review-hero__dot--green"></span>
+      </div>
+      <div class="diff-review-hero__filename">
+        rfc/simplify-enterprise-onboarding • docs/prd/onboarding.md
+      </div>
+      <div class="diff-review-hero__spacer" aria-hidden="true"></div>
+    </div>
+
+    <div class="diff-review-hero__content">
+      <div class="diff-review-hero__line diff-review-hero__line--context">
+        <span class="diff-review-hero__sign"> </span>
+        <span class="diff-review-hero__text">## Signup flow</span>
+      </div>
+      <div class="diff-review-hero__line diff-review-hero__line--removed">
+        <span class="diff-review-hero__sign">-</span>
+        <span class="diff-review-hero__text">
+          New users should reach workspace setup immediately after signup
+        </span>
+      </div>
+      <div class="diff-review-hero__line diff-review-hero__line--added">
+        <span class="diff-review-hero__sign">+</span>
+        <span class="diff-review-hero__text">
+          Self-serve users should reach workspace setup immediately after signup
+        </span>
+      </div>
+      <div class="diff-review-hero__line diff-review-hero__line--added">
+        <span class="diff-review-hero__sign">+</span>
+        <span class="diff-review-hero__text">
+          Enterprise accounts must complete approval before workspace setup
+        </span>
+      </div>
+      <div class="diff-review-hero__line diff-review-hero__line--added">
+        <span class="diff-review-hero__sign">+</span>
+        <span class="diff-review-hero__text">
+          Approval remains required for legal review and account routing
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <aside class="diff-review-hero__comment">
+    <div class="diff-review-hero__comment-header">
+      <span class="diff-review-hero__comment-author">Leah (enterprise)</span> commented
+    </div>
+    <div class="diff-review-hero__comment-body">
+      keep this for enterprise. approval has to happen before setup for contract reasons.
+    </div>
+  </aside>
+</figure>
+
+<style>
+  .diff-review-hero {
+    position: relative;
+    width: 100%;
+    color: #1f2328;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    isolation: isolate;
+  }
+
+  .diff-review-hero[data-size='article'] {
+    --dr-radius: 1.15rem;
+    --dr-bar-height: 2.7rem;
+    --dr-font-size: clamp(0.88rem, 0.76rem + 0.55vw, 1.15rem);
+    --dr-line-gap: 0.6rem;
+    --dr-line-padding-x: 0.95rem;
+    --dr-line-padding-y: 0.6rem;
+    --dr-sign-width: 0.95rem;
+    --dr-filename-size: 0.75rem;
+    --dr-terminal-width: calc(100% - 4.75rem);
+    --dr-comment-width: min(13rem, 34vw);
+    --dr-comment-top: 27%;
+    --dr-comment-right: 0;
+    --dr-comment-header-size: 0.78rem;
+    --dr-comment-body-size: 0.88rem;
+  }
+
+  .diff-review-hero[data-size='cover'] {
+    --dr-radius: 1.15rem;
+    --dr-bar-height: 3.9rem;
+    --dr-font-size: 1.95rem;
+    --dr-line-gap: 1.1rem;
+    --dr-line-padding-x: 2.1rem;
+    --dr-line-padding-y: 0.95rem;
+    --dr-sign-width: 2.25rem;
+    --dr-filename-size: 1.12rem;
+    --dr-terminal-width: 100%;
+    --dr-comment-width: 22rem;
+    --dr-comment-top: 30%;
+    --dr-comment-right: 0.6rem;
+    --dr-comment-header-size: 1.1rem;
+    --dr-comment-body-size: 1.45rem;
+  }
+
+  .diff-review-hero__terminal {
+    width: var(--dr-terminal-width);
+    overflow: hidden;
+    border: 1px solid #d0d7de;
+    border-radius: var(--dr-radius);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow:
+      0 18px 40px rgba(31, 35, 40, 0.08),
+      0 1px 0 rgba(255, 255, 255, 0.7) inset;
+    backdrop-filter: blur(6px);
+  }
+
+  .diff-review-hero__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--dr-bar-height);
+    padding: 0 0.95rem;
+    border-bottom: 1px solid #d0d7de;
+    background: rgba(246, 248, 250, 0.88);
+  }
+
+  .diff-review-hero__dots {
+    display: flex;
+    gap: 0.42rem;
+  }
+
+  .diff-review-hero__dot {
+    width: 0.62rem;
+    height: 0.62rem;
+    border-radius: 999px;
+  }
+
+  .diff-review-hero__dot--red { background: #dd7c7b; }
+  .diff-review-hero__dot--yellow { background: #e3b341; }
+  .diff-review-hero__dot--green { background: #4ac26b; }
+
+  .diff-review-hero__filename {
+    padding: 0 0.75rem;
+    overflow: hidden;
+    color: #656d76;
+    font-size: var(--dr-filename-size);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .diff-review-hero__spacer {
+    width: 2.5rem;
+    flex: 0 0 auto;
+  }
+
+  .diff-review-hero__content {
+    padding-top: 0.45rem;
+    font-family: "SFMono-Regular", SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, monospace;
+    font-size: var(--dr-font-size);
+    line-height: 1.45;
+  }
+
+  .diff-review-hero__line {
+    display: grid;
+    grid-template-columns: var(--dr-sign-width) 1fr;
+    gap: var(--dr-line-gap);
+    padding: var(--dr-line-padding-y) var(--dr-line-padding-x);
+    border-top: 1px solid #d8dee4;
+  }
+
+  .diff-review-hero__sign {
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .diff-review-hero__line--context {
+    background: rgba(255, 255, 255, 0.78);
+  }
+
+  .diff-review-hero__line--removed {
+    background: rgba(255, 235, 233, 0.9);
+    color: #cf222e;
+  }
+
+  .diff-review-hero__line--added {
+    background: rgba(218, 251, 225, 0.96);
+    color: #1a7f37;
+  }
+
+  .diff-review-hero__comment {
+    position: absolute;
+    top: var(--dr-comment-top);
+    right: var(--dr-comment-right);
+    width: var(--dr-comment-width);
+    border: 1px solid #d0d7de;
+    border-radius: 0.95rem;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 14px 30px rgba(31, 35, 40, 0.1);
+    overflow: hidden;
+  }
+
+  .diff-review-hero__comment-header {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid #d8dee4;
+    background: rgba(246, 248, 250, 0.88);
+    color: #656d76;
+    font-size: var(--dr-comment-header-size);
+  }
+
+  .diff-review-hero__comment-author {
+    color: #1f2328;
+    font-weight: 650;
+  }
+
+  .diff-review-hero__comment-body {
+    padding: 0.7rem 0.75rem;
+    font-size: var(--dr-comment-body-size);
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+
+  @media (max-width: 920px) {
+    .diff-review-hero[data-size='article'] .diff-review-hero__comment {
+      right: 0;
+      width: min(11.5rem, 38vw);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .diff-review-hero[data-size='article'] .diff-review-hero__comment {
+      position: static;
+      width: auto;
+      margin-top: 0.9rem;
+      margin-left: auto;
+    }
+
+    .diff-review-hero[data-size='article'] .diff-review-hero__terminal {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .diff-review-hero[data-size='article'] {
+      --dr-bar-height: 2.45rem;
+      --dr-line-gap: 0.55rem;
+      --dr-line-padding-x: 0.75rem;
+      --dr-line-padding-y: 0.6rem;
+      --dr-sign-width: 0.85rem;
+      --dr-filename-size: 0.7rem;
+      --dr-comment-header-size: 0.76rem;
+      --dr-comment-body-size: 0.84rem;
+    }
+
+    .diff-review-hero[data-size='article'] .diff-review-hero__filename {
+      text-align: right;
+    }
+  }
+</style>

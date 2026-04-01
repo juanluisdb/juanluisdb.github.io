@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { formatDate } from '../utils/formatDate';
+
+const posts = (await getCollection('blog')).sort(
+  (left, right) => right.data.pubDate.valueOf() - left.data.pubDate.valueOf(),
+);
+const recentPosts = posts.slice(0, 3);
+const canonicalURL = Astro.site ? new URL('/', Astro.site).toString() : undefined;
+
+const profileLinks = [
+  { label: 'GitHub', href: 'https://github.com/juanluisdb' },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/juan-luis-dominguez-bermudez/',
+  },
+  { label: 'X', href: 'https://x.com/JuanLDominguez_' },
+];
+---
+
+<Base
+  title="Juan Luis Domínguez"
+  description="I work as an AI Engineer building bigdata.com and I enjoy automating things, including my job."
+  canonicalURL={canonicalURL}
+>
+  <section class="space-y-14">
+    <header class="space-y-6">
+      <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">Juan Luis Domínguez</h1>
+      <p class="max-w-2xl text-base leading-8 text-fg-muted">
+        I work as an AI Engineer building <a href="https://bigdata.com" class="text-accent underline-offset-4 hover:underline">bigdata.com</a>.
+        I enjoy automating things, including my job. You can also find me on{' '}
+        {profileLinks.map((link, index) => (
+          <>
+            {index > 0 && (index === profileLinks.length - 1 ? ' and ' : ', ')}
+            <a href={link.href} class="text-accent underline-offset-4 hover:underline">
+              {link.label}
+            </a>
+          </>
+        ))}
+        .
+      </p>
+    </header>
+
+    <section class="space-y-6">
+      <div class="flex items-baseline justify-between gap-4">
+        <h2 class="text-sm font-medium uppercase tracking-[0.18em] text-fg-muted">Recent posts</h2>
+        <a href="/blog" class="text-sm text-accent underline-offset-4 hover:underline">
+          All posts →
+        </a>
+      </div>
+
+      <ul class="space-y-6">
+        {recentPosts.map((post) => (
+          <li>
+            <a
+              href={`/blog/${post.id}/`}
+              class="inline-flex flex-wrap items-baseline gap-x-3 gap-y-1 text-base underline-offset-4 hover:underline"
+            >
+              <span class="font-mono text-sm text-fg-muted">{formatDate(post.data.pubDate)}</span>
+              <span>{post.data.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </section>
+</Base>

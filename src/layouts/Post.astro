@@ -1,0 +1,53 @@
+---
+import Base from './Base.astro';
+import DiffReviewHero from '../components/DiffReviewHero.astro';
+import { formatDate } from '../utils/formatDate';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  canonicalURL?: string;
+  hero?: 'diff-review';
+  coverImage?: string;
+  coverAlt?: string;
+}
+
+const { title, description, pubDate, canonicalURL, hero, coverImage, coverAlt } = Astro.props;
+---
+
+<Base
+  title={title}
+  description={description}
+  canonicalURL={canonicalURL}
+  socialImage={coverImage}
+>
+  <article class="space-y-10">
+    <header class="space-y-4 border-b border-border pb-8">
+      <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+        <a href="/" class="text-accent underline-offset-4 hover:underline">Home</a>
+        <a href="/blog" class="text-accent underline-offset-4 hover:underline">Posts</a>
+      </div>
+      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
+      <p class="text-sm text-fg-muted">{formatDate(pubDate)}</p>
+    </header>
+
+    {hero === 'diff-review' ? (
+      <DiffReviewHero />
+    ) : coverImage && (
+      <figure class="overflow-hidden rounded-2xl border border-border bg-white">
+        <img
+          src={coverImage}
+          alt={coverAlt ?? ''}
+          class="h-auto w-full"
+          loading="eager"
+          decoding="async"
+        />
+      </figure>
+    )}
+
+    <div class="post-body">
+      <slot />
+    </div>
+  </article>
+</Base>
